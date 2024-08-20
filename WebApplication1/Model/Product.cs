@@ -4,17 +4,16 @@ namespace WebApplication1.Model
 {
     public class ProductVM
     {
+        public string Id { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
 
+        public string ImgMain { get; set; }
     }
 
     public class Product : ProductVM
     {
-        public string Id { get; set; }
         public string Description { get; set; }
-
-        public List<Img> Imgs { get; set; }
         public List<Size> Sizes { get; set; }
         public List<Topping> Toppings { get; set; }
     }

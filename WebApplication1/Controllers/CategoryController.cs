@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Model;
 
@@ -26,14 +27,24 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet("{category}")]
-        public IActionResult GetSubCategory(string? category )
+        public IActionResult GetSubCategory(string? category)
         {
+            if (string.IsNullOrEmpty(category))
+            {
+                return BadRequest("Category cannot be null or empty.");
+            }
+
             var list = _context.Categories
                 .Where(c => c.Id == category)
                 .SelectMany(c => c.SubCategories)
-                .Select(sc => new SubCategoryVM
+                .SelectMany(sc => sc.Products)
+                .Include(p => p.Imgs)
+                .Select(p => new Model.ProductVM
                 {
-                    Name = sc.Name
+                    Name = p.Name,
+                    Price = p.Price,
+                    Id = p.Id,
+                    ImgMain = p.Imgs.First().SourceImg,
                 })
                 .ToList();
 
@@ -47,6 +58,6 @@ namespace WebApplication1.Controllers
             }
         }
 
-        
+
     }
 }

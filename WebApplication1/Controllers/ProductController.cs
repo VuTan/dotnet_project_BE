@@ -17,7 +17,6 @@ namespace WebApplication1.Controllers
             _context = context;
         }
 
-
         [HttpGet("{id}")]
         public IActionResult GetById(string id)
         {
